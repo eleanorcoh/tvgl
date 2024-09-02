@@ -154,6 +154,7 @@ class ParallelTVGL(BaseGraphicalLasso):
         if self.processes > self.blocks:
             self.processes = self.blocks
         self.chunk = int(np.round(self.blocks/float(self.processes)))
+        self.manager = Manager()
 
     def init_algorithm(self):
 
@@ -162,7 +163,7 @@ class ParallelTVGL(BaseGraphicalLasso):
         self.results = JoinableQueue()
         self.pipes = [Pipe() for i in range(self.processes-1)]
         self.procs = []
-        stopping_criteria = Manager().list()
+        stopping_criteria = self.manager.list()
         for i in range(self.processes):
             stopping_criteria.append(False)
 
